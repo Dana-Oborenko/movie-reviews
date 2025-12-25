@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+python-dotenv
+transformers
+torch
+pydantic>=2
+pydantic-settings>=2
+alembic
+pytest
+httpx
+pytest-cov

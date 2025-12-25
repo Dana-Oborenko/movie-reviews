@@ -1,0 +1,22 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+backend/.venv/
+backend/app.db
+backend/*.db
+backend/.pytest_cache/
+backend/.coverage
+backend/htmlcov/
+
+# Node / Vue
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
