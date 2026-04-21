@@ -18,6 +18,11 @@ const POLL_INTERVAL_MS = 2000
 // Form state
 const newMovieTitle = ref('')
 const newMovieDesc = ref('')
+const newMovieYear = ref('')
+const newMovieGenres = ref('')
+const newMoviePosterUrl = ref('')
+const newMovieExternalRating = ref('')
+
 const newReviewMovieId = ref(null)
 const newReviewText = ref('')
 
@@ -100,9 +105,17 @@ async function addMovie() {
     await api.post('/movies', {
       title: newMovieTitle.value.trim(),
       description: newMovieDesc.value.trim() || null,
+      year: newMovieYear.value ? Number(newMovieYear.value) : null,
+      genres: newMovieGenres.value.trim() || null,
+      poster_url: newMoviePosterUrl.value.trim() || null,
+      external_rating: newMovieExternalRating.value ? Number(newMovieExternalRating.value) : null,
     })
     newMovieTitle.value = ''
     newMovieDesc.value = ''
+    newMovieYear.value = ''
+    newMovieGenres.value = ''
+    newMoviePosterUrl.value = ''
+    newMovieExternalRating.value = ''
     await loadMovies()
   } catch (e) {
     console.error(e)
@@ -216,6 +229,33 @@ watch(selectedMovieForFilter, async () => {
         type="text"
         placeholder="Description (optional)"
         style="flex:2; padding:8px"
+      />
+      <input
+        v-model="newMovieYear"
+        type="number"
+        placeholder="Year"
+        style="width:120px; padding:8px"
+      />
+
+      <input
+        v-model="newMovieGenres"
+        type="text"
+        placeholder='Genres (e.g. ["Sci-Fi","Drama"] or Sci-Fi, Drama)'
+        style="flex:2; padding:8px"
+      />
+
+      <input
+        v-model="newMoviePosterUrl"
+        type="text"
+        placeholder="Poster URL"
+        style="flex:2; padding:8px"
+      />
+
+      <input
+        v-model="newMovieExternalRating"
+        type="number"
+        placeholder="External rating"
+        style="width:140px; padding:8px"
       />
       <button @click="addMovie" style="padding:8px 12px; cursor:pointer">
         Create

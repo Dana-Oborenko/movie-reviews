@@ -6,6 +6,7 @@ from app.db.session import SessionLocal
 from app.db import models
 from app.schemas.review import ReviewCreate, ReviewOut
 from app.services.ml import analyze_sentiment
+from app.auth.deps import require_admin
 
 router = APIRouter(prefix="/reviews", tags=["reviews"])
 
@@ -100,7 +101,7 @@ def list_reviews(
 
 
 @router.delete("/{review_id}", status_code=204)
-def delete_review(review_id: int, db: Session = Depends(get_db)):
+def delete_review(review_id: int, db: Session = Depends(get_db), _=Depends(require_admin)):
     """Delete a single review."""
     review = db.query(models.Review).get(review_id)
     if not review:
@@ -123,7 +124,7 @@ def reviews_stats(db: Session = Depends(get_db)):
     return {sentiment or "UNKNOWN": count for sentiment, count in rows}
 
 @router.post("/{review_id}/retry", summary="Retry sentiment analysis for a review")
-def retry_review(review_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+def retry_review(review_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db), _=Depends(require_admin)):
     """
     Reset ML status to pending and re-run sentiment analysis in background.
     """

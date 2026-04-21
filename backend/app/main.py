@@ -2,9 +2,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import health, movies, reviews
+from fastapi import Depends
+from app.auth.deps import get_current_user
 
 
-# <-- this must exist exactly with this name
 app = FastAPI(title="Movie Reviews API", version="0.1.0")
 
 # CORS for local Vue dev server
@@ -24,3 +25,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(movies.router)
 app.include_router(reviews.router)
+
+@app.get("/me")
+async def me(user=Depends(get_current_user)):
+    return user

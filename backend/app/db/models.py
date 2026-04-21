@@ -10,6 +10,12 @@ class Movie(Base):
     title = Column(String(255), unique=True, index=True, nullable=False)
     description = Column(Text, nullable=True)
 
+    year = Column(Integer, nullable=True)
+    genres = Column(Text, nullable=True)  # store as JSON string or plain comma-separated text
+    poster_url = Column(String(500), nullable=True)
+    external_rating = Column(Integer, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
     # One-to-many relationship: Movie -> Review
     reviews = relationship("Review", back_populates="movie", cascade="all,delete")
 
@@ -32,3 +38,12 @@ class Review(Base):
     # ML processing status: pending -> done/failed
     ml_status = Column(String(16), nullable=False, default="pending")
     ml_error = Column(Text, nullable=True)
+
+# User roles table: maps Supabase user_id -> role (admin/user)
+class UserRole(Base):
+    __tablename__ = "user_roles"
+
+    # Supabase user id (UUID string) stored as text
+    user_id = Column(String(64), primary_key=True, index=True)
+    role = Column(String(16), nullable=False, default="user")
+
